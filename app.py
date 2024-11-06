@@ -15,7 +15,7 @@ def search_places(text, give_id=False):
     headers = {
         'Content-Type': 'application/json',  # Specify the content type
         'X-Goog-FieldMask': 'places',  # Field mask as a string
-        'X-Goog-Api-Key': 'AIzaSyDLeCxb5iPYEc-JM8PYwL4RKpBC0Ts-HHw'  # Replace with your actual API key
+        'X-Goog-Api-Key': 'AIzaSyDLeCxb5iPYEc-JM8PYwL4RKpBC0Ts-HHw'  # Ideally, this should not be leaked... I will revoke access to this after the hackathon :)
     }
     body = {
         "textQuery": text  # The query you want to send
