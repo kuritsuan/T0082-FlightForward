@@ -1,0 +1,141 @@
+<!--  
+  <div class="bar">
+  <div class="s-icon"><img src="searchIcon.png"></div>
+  <div class="s-text">search</div>
+</div>-->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cathay Miracle AI</title>
+        <link rel="stylesheet" href="style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="//unpkg.com/alpinejs" defer></script>
+    </head>
+    <body class="main" x-data="{messages:[], formInput:'',awaitingAIResponse:true}">
+        <div class="header">
+            <header class="head">
+
+            </header>
+        </div>
+
+        <div class="image-container">
+            <img src="logo.png"/>
+        </div>
+        <div class="welcome_text" x-init="awaitAI('Initial State', (x, y) => {messages.push({sender:'AI', text:x}); awaitingAIResponse=false; })">Share your trip with us!</div>
+
+        <div >
+
+            <template x-for="i in messages">
+            
+            <div>
+
+            <template x-if="i.sender=='AI'">
+            <div class="aichat">
+                <div class="lbox">
+                    <p class="name">Cath_AI Miracle</p>
+                    <div class="box">
+                        <div><pre class="text whitespace-pre-wrap"><span x-text="i.text"></span></pre></div>
+                        <template x-if="i.iframe && i.iframe.includes('https://www.google')" >
+                            <iframe :src="i.iframe" class="m-5"></iframe>
+                        </template>
+                        <template x-if="i.iframe && i.iframe.includes('https://m.uber')" >
+                            <div class="flex align-center">
+                                <img class="m-5 border-t-black rounded-sm w-24" src="https://cdn-assets-us.frontify.com/s3/frontify-enterprise-files-us/eyJwYXRoIjoicG9zdG1hdGVzXC9hY2NvdW50c1wvODRcLzQwMDA1MTRcL3Byb2plY3RzXC8yN1wvYXNzZXRzXC9lZFwvNTUwOVwvNmNmOGVmM2YzMjFkMTA3YThmZGVjNjY1NjJlMmVmMzctMTYyMDM3Nzc0OC5haSJ9:postmates:9KZWqmYNXpeGs6pQy4UCsx5EL3qq29lhFS6e4ZVfQrs?width=200"/>
+                                <a class="underline hover:text-blue-700" :href="i.iframe">Get your uber here!</a>
+                            </div>
+                        </template>
+                    </div>
+                    
+                </div>
+            </div>
+            </template>
+
+            <template x-if="i.sender=='User'">
+            <div class="userchat">
+                <div class="lbox2">
+                    <div class="tb1">
+                        <p>Tan, Joshua</p>
+                    </div>
+                    <div class="obox">
+                        <div class="box2">
+                            <p class="text2"><span x-text="i.text"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </template> 
+
+        </template> 
+
+        </div>
+
+        <template x-if="awaitingAIResponse">
+            <div class="aichat">
+                <div class="lbox">
+                    <p class="name">Cath_AI Miracle</p>
+                    <div class="box">
+                        <div><p2 class="text"><span class="font-bold">...</span></p2></div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div class="h-48">
+
+        </div>
+        
+        <template x-if="!awaitingAIResponse" x-transition.opacity>
+        <div class="input">
+            <div class="inputbox">
+                <div class="inputbar">
+                    <div class="inputtext">
+                        <input type="text" x-model="formInput" placeholder="Experience the Magic" class="bg-transparent w-full py-2 px-3 focus:outline-none text-blue-950 placeholder-white"/>
+                    </div>
+                    <div class="inputbutton">
+                        <div class="inputicon">
+                            <button @click="() => { if(formInput==''){return}  messages.push({sender:'User', text:formInput}); awaitAI(formInput, (x, y) => {messages.push({sender:'AI', text:x, iframe:y}); awaitingAIResponse=false}); formInput=''; }">
+                                <img src="stars.png"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </template>
+
+        <script>
+            function awaitAI(user_message, callback){
+                fetch('/api/sendMessage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' // Set the content type to JSON
+                    },
+                    body: JSON.stringify({
+                        user_message
+                    }) // Convert the form data to JSON
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Parse the JSON from the response
+                })
+                .then(data => {
+                    console.log('Success:', data); // Handle the response data
+                    callback(data.response, data.iframe)
+                })
+                .catch((error) => {
+                    console.error('Error:', error); // Handle any errors
+                });
+            }
+        </script>
+
+    </body>
+</html>
