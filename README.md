@@ -12,3 +12,6 @@ Cath_AI Miracle is an avant-garde intelligent assistant designed to synergize in
 - Install all modules from requirements.txt
 - Install Ollama: Make sure Ollama is installed on your system.
 - Pull Llama3 Model: Download the Llama3 model, which serves as the foundation for the reengineered assistant.
+
+
+~ Developers of Cath_AI Miracle :)
